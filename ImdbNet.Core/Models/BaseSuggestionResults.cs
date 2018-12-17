@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 
-namespace ImdbNet.Core
+namespace ImdbNet.Core.Models
 {
 	[JsonObject(MemberSerialization.OptIn)]
 	public class BaseSuggestionResults<T>

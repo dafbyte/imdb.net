@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 
 
-namespace ImdbNet.Core
+namespace ImdbNet.Core.Models
 {
 	/*
 {
