@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ImdbNet.Core.Models;
 using Newtonsoft.Json;
 
 
@@ -56,6 +59,76 @@ namespace ImdbNet.Core
 				Console.WriteLine(e.StackTrace);
 				return null;
 			}
+		}
+
+		#endregion
+
+
+		#region People
+
+		public static Person GetPerson(string id) => GetPersonAsync(id).Result;
+
+		public static async Task<Person> GetPersonAsync(string id)
+		{
+			var html = await GetPersonHtml(id);
+
+			var matches = Regex.Matches(html, RegexPatterns.Names.Name, RegexOptions.IgnoreCase);
+			string name = null;
+			if (matches.Count > 0 && matches[0].Groups.Count > 1)
+			{
+				name = matches[0].Groups[1].Value;
+				Console.WriteLine($"Identified person name: {name}");
+			}
+			else
+			{
+				Console.WriteLine("Failed to parse person name.");
+			}
+
+			var result = new Person(id, name);
+
+			var films = new List<(string id, string title)>();
+			var titles = Regex.Matches(html, RegexPatterns.Names.ActorRoles);
+			foreach (Match match in titles)
+			{
+				string titleId = match.Groups[1].Value,
+					title = match.Groups[2].Value;
+				if (string.IsNullOrEmpty(titleId))
+				{
+					Console.WriteLine("Empty title found, skipping.");
+				}
+				else
+				{
+					var msg = $"Found title #{titleId}: {title}";
+					Console.WriteLine(msg);
+					result.Filmography.Add(titleId, title);
+				}
+			}
+
+			Console.WriteLine("Total titles found: " + result.Filmography.Count);
+			return result;
+		}
+
+		private static async Task<string> GetPersonHtml(string id)
+		{
+			if (string.IsNullOrEmpty(id))
+				throw new ArgumentNullException(nameof(id));
+
+			var uri = $"{Urls.Name}/{id}/";
+			string content;
+
+			try
+			{
+				Console.WriteLine($"Getting data for person \"{id}\" at {uri}");
+				content = await GetContent(uri);
+				//System.IO.File.WriteAllText(id + ".html", content);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.Message);
+				Console.WriteLine(e.StackTrace);
+				content = null;
+			}
+			return content;
 		}
 
 		#endregion
