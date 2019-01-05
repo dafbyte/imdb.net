@@ -134,6 +134,60 @@ namespace ImdbNet.Core
 		#endregion
 
 
+		#region Movies
+
+
+		public static Movie GetMovie(string id) => GetMovieAsync(id).Result;
+
+		public static async Task<Movie> GetMovieAsync(string id)
+		{
+			var html = await GetMovieHtml(id);
+
+			var matches = Regex.Matches(html, RegexPatterns.Titles.Name, RegexOptions.IgnoreCase);
+			string name = null;
+			if (matches.Count > 0 && matches[0].Groups.Count > 1)
+			{
+				name = matches[0].Groups[1].Value;
+				Console.WriteLine($"Identified movie name: {name}");
+			}
+			else
+			{
+				Console.WriteLine("Failed to parse movie name.");
+			}
+
+			var result = new Movie(id, name);
+
+
+			//Console.WriteLine("Total titles found: " + result.Filmography.Count);
+			return result;
+		}
+
+		private static async Task<string> GetMovieHtml(string id)
+		{
+			if (string.IsNullOrEmpty(id))
+				throw new ArgumentNullException(nameof(id));
+
+			var uri = $"{Urls.Title}/{id}/";
+			string content;
+
+			try
+			{
+				Console.WriteLine($"Getting data for movie \"{id}\" at {uri}");
+				content = await GetContent(uri);
+				//System.IO.File.WriteAllText(id + ".html", content);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.Message);
+				Console.WriteLine(e.StackTrace);
+				content = null;
+			}
+			return content;
+		}
+
+		#endregion
+
+
 		#region Common Methods
 
 		private static async Task<string> GetContent(string uri)

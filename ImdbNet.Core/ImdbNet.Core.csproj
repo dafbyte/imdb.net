@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\BaseSuggestionResults.cs" />
+    <Compile Include="Models\Movie.cs" />
     <Compile Include="Models\NamesSuggestions.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
