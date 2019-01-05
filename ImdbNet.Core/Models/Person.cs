@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 
-namespace ImdbNet.Core
+namespace ImdbNet.Core.Models
 {
 	public class Person
 	{
