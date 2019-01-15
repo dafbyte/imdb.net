@@ -11,17 +11,22 @@ namespace ImdbNet.Tests
 		[Test]
 		public void TestGetTitle()
 		{
-			var rng = new Random(DateTime.Now.Millisecond);
-			var i = rng.Next(Top50.Length);
-			var item = Top50[i];
-			Console.WriteLine($"Testing item #{i}: {item}");
+			var item = GetMovieTestItem();
+			Console.WriteLine($"Testing item: {item}");
 			var movie = Utils.GetMovie(item.id);
 			Assert.NotNull(movie, "Result should return a value.");
 			Assert.IsTrue(string.Equals(item.title, movie.Name),
 				$"Returned title is \"{movie.Name}\", expected \"{item.title}\"");
 		}
 
-		private static (string id, string url, string title)[] Top50 =
+		private static (string id, string url, string title) GetMovieTestItem()
+		{
+			var rng = new Random(DateTime.Now.Millisecond);
+			var i = rng.Next(Top50.Length);
+			return Top50[i];
+		}
+
+		private static readonly (string id, string url, string title)[] Top50 =
 		{
 			("tt0111161", "https://www.imdb.com/title/tt0111161/", "The Shawshank Redemption"),
 			("tt0068646", "https://www.imdb.com/title/tt0068646/", "The Godfather"),
