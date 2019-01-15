@@ -1,6 +1,4 @@
-﻿using System;
-using ImdbNet.Core;
-using ImdbNet.Core.Models;
+﻿using ImdbNet.Core;
 using NUnit.Framework;
 
 
