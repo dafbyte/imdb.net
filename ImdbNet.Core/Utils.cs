@@ -144,6 +144,8 @@ namespace ImdbNet.Core
 			var html = await GetMovieHtml(id);
 
 			var matches = Regex.Matches(html, RegexPatterns.Titles.Name, RegexOptions.IgnoreCase);
+			var json = Regex.Matches(html, RegexPatterns.Titles.Json, RegexOptions.IgnoreCase)[0].Groups[1].Value;
+			var obj = JsonConvert.DeserializeObject<ImdbModels.MovieModel>(json);
 			string name = null;
 			if (matches.Count > 0 && matches[0].Groups.Count > 1)
 			{

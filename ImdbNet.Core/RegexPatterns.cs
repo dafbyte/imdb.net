@@ -12,6 +12,8 @@
 		public static class Titles
 		{
 			public const string Name = @"<meta property=[\'\""]og:title[\'\""] content=[\'\""](.*)[\'\""]\s?\/>";
+			public const string Json = @"<script type=\""application\/ld\+json"">(?<json>[^<]*)<\/script>";
+
 		}
 	}
 }
