@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ImdbModels\MovieModel.cs" />
     <Compile Include="Models\BaseSuggestionResults.cs" />
     <Compile Include="Models\Movie.cs" />
     <Compile Include="Models\NamesSuggestions.cs" />
