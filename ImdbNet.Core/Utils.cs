@@ -1,11 +1,11 @@
-﻿using System;
+﻿using ImdbNet.Core.Models;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using ImdbNet.Core.Models;
-using Newtonsoft.Json;
 
 
 namespace ImdbNet.Core
@@ -156,7 +156,7 @@ namespace ImdbNet.Core
 			}
 
 			var result = new Movie(id, name);
-
+			ParseCast(html, result);
 
 			//Console.WriteLine("Total titles found: " + result.Filmography.Count);
 			return result;
@@ -167,7 +167,7 @@ namespace ImdbNet.Core
 			if (string.IsNullOrEmpty(id))
 				throw new ArgumentNullException(nameof(id));
 
-			var uri = $"{Urls.Title}/{id}/";
+			var uri = $"{Urls.Title}/{id}/reference";
 			string content;
 
 			try
@@ -183,6 +183,32 @@ namespace ImdbNet.Core
 				content = null;
 			}
 			return content;
+		}
+
+		private static void ParseCast(string html, Movie movie)
+		{
+			var matches = Regex.Matches(html, RegexPatterns.Titles.CastTable, RegexOptions.IgnoreCase);
+			if (matches.Count <= 0) return;
+
+			var indStart = matches[0].Index + matches[0].Length;
+			//Regex.Matches(html.Substring(indStart), "</table>", RegexOptions.IgnoreCase);
+			var rgxTableEnd = new Regex("</table>", RegexOptions.IgnoreCase);
+			matches = rgxTableEnd.Matches(html, indStart);
+			if (matches.Count <= 0) return;
+
+			var tableHtml = html.Substring(indStart, matches[0].Index - indStart);
+			var cast = Regex.Matches(tableHtml, @"<span class=""itemprop"" itemprop=""name"">(?<cast>.*)</span>",
+				RegexOptions.Multiline);
+			movie.Casts = new List<MovieCast>(cast.Count);
+			foreach (Match match in cast)
+			{
+				var item = new MovieCast
+				{
+					Person = new Person("", match.Groups[1].Value),
+					Role = "Cast"
+				};
+				movie.Casts.Add(item);
+			}
 		}
 
 		#endregion
