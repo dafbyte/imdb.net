@@ -13,6 +13,7 @@
 		{
 			public const string Name = @"<meta property=[\'\""]og:title[\'\""] content=[\'\""](?<title>.*)\s\(\d{4}\)[\'\""]\s?\/>";
 			public const string CastTable = @"<table class\=\""cast_list\"">";
+			public const string CastTableItem = @"<a href="".*\/(?<id>nm\d+)\/.*""\s*itemprop='url'\s*>[.\s]*<span class=""itemprop"" itemprop=""name"">(?<name>.*)</span>";
 			//public const string CastTable = @"<table class\=\""cast_list\"">\s*<tbody>\s(?<castRow><tr>.*</tr>)*\s*</table>";
 		}
 	}

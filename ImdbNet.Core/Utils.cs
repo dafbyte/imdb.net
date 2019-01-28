@@ -197,14 +197,14 @@ namespace ImdbNet.Core
 			if (matches.Count <= 0) return;
 
 			var tableHtml = html.Substring(indStart, matches[0].Index - indStart);
-			var cast = Regex.Matches(tableHtml, @"<span class=""itemprop"" itemprop=""name"">(?<cast>.*)</span>",
-				RegexOptions.Multiline);
-			movie.Casts = new List<MovieCast>(cast.Count);
-			foreach (Match match in cast)
+			var casts = Regex.Matches(tableHtml, RegexPatterns.Titles.CastTableItem,
+				RegexOptions.IgnoreCase | RegexOptions.Multiline);
+			movie.Casts = new List<MovieCast>(casts.Count);
+			foreach (Match cast in casts)
 			{
 				var item = new MovieCast
 				{
-					Person = new Person("", match.Groups[1].Value),
+					Person = new Person(cast.Groups[1].Value, cast.Groups[2].Value),
 					Role = "Cast"
 				};
 				movie.Casts.Add(item);
