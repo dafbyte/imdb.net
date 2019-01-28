@@ -17,6 +17,9 @@ namespace ImdbNet.Tests
 			Assert.NotNull(movie, "Result should return a value.");
 			Assert.IsTrue(string.Equals(item.title, movie.Name),
 				$"Returned title is \"{movie.Name}\", expected \"{item.title}\"");
+			Assert.IsNotEmpty(movie.Casts, "Movie cast should contain items.");
+			foreach (var cast in movie.Casts)
+				Console.WriteLine("\t{0}, {1}", cast.Person.Id, cast.Person.Name);
 		}
 
 		private static (string id, string url, string title) GetMovieTestItem()
