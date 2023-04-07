@@ -147,7 +147,7 @@ namespace ImdbNet.Core
 			string name = null;
 			if (matches.Count > 0 && matches[0].Groups.Count > 1)
 			{
-				name = matches[0].Groups[1].Value;
+				name = matches[0].Groups["title"]?.Value;
 				Console.WriteLine($"Identified movie name: {name}");
 			}
 			else

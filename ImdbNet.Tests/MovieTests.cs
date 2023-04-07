@@ -11,7 +11,7 @@ namespace ImdbNet.Tests
 		[Test]
 		public void TestGetTitle()
 		{
-			var item = GetMovieTestItem();
+			var item = GetRandomMovieTestItem();
 			Console.WriteLine($"Testing item: {item}");
 			var movie = Utils.GetMovie(item.id);
 			Assert.NotNull(movie, "Result should return a value.");
@@ -22,7 +22,7 @@ namespace ImdbNet.Tests
 				Console.WriteLine("\t{0}, {1}", cast.Person.Id, cast.Person.Name);
 		}
 
-		private static (string id, string url, string title) GetMovieTestItem()
+		private static (string id, string url, string title) GetRandomMovieTestItem()
 		{
 			var rng = new Random(DateTime.Now.Millisecond);
 			var i = rng.Next(Top50.Length);
