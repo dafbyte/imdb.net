@@ -13,6 +13,7 @@ namespace ImdbNet.Core.Models
 
 		public string Id { get; }
 		public string Name { get; }
+		public string OriginalName { get; set; }
 		public ICollection<MovieCast> Casts { get; set; }
 		public ICollection<string> Images { get; set; }
 	}

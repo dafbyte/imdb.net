@@ -156,6 +156,17 @@ namespace ImdbNet.Core
 			}
 
 			var result = new Movie(id, name);
+            matches = Regex.Matches(html, RegexPatterns.Titles.OriginalNameCaption, RegexOptions.IgnoreCase);
+			if (matches.Count > 0)
+			{
+				var prev = html.LastIndexOf('>', matches[0].Index) + 1;
+				result.OriginalName = html.Substring(prev, matches[0].Index - prev).Trim('\t', '\r', '\n', ' ');
+			}
+			else
+			{
+				Console.WriteLine("No original title found.");
+			}
+
 			ParseCast(html, result);
 
 			//Console.WriteLine("Total titles found: " + result.Filmography.Count);
