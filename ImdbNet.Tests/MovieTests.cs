@@ -9,18 +9,20 @@ namespace ImdbNet.Tests
 	public class MovieTests
 	{
 		[Test]
+		public void TestGetTop50Titles()
+		{
+			foreach (var item in Top50)
+			{
+                TestGetTitle(item, false);
+            }
+        }
+
+		[Test]
 		public void TestGetTitle()
 		{
 			var item = GetRandomMovieTestItem();
-			Console.WriteLine($"Testing item: {item}");
-			var movie = Utils.GetMovie(item.id);
-			Assert.NotNull(movie, "Result should return a value.");
-			Assert.IsTrue(string.Equals(item.title, movie.Name),
-				$"Returned title is \"{movie.Name}\", expected \"{item.title}\"");
-			Assert.IsNotEmpty(movie.Casts, "Movie cast should contain items.");
-			foreach (var cast in movie.Casts)
-				Console.WriteLine("\t{0}, {1}", cast.Person.Id, cast.Person.Name);
-		}
+			TestGetTitle(item, true);
+        }
 
 		private static (string id, string url, string title) GetRandomMovieTestItem()
 		{
@@ -29,11 +31,23 @@ namespace ImdbNet.Tests
 			return Top50[i];
 		}
 
-		private static readonly (string id, string url, string title)[] Top50 =
+		private void TestGetTitle((string id, string url, string title) item, bool printCast)
+		{
+            Console.WriteLine($"Testing item: {item}");
+            var movie = Utils.GetMovie(item.id);
+            Assert.NotNull(movie, "Result should return a value.");
+            Assert.IsTrue(string.Equals(item.title, movie.OriginalName ?? movie.Name),
+                $"Returned title is \"{movie.Name}\", expected \"{item.title}\"");
+            Assert.IsNotEmpty(movie.Casts, "Movie cast should contain items.");
+            foreach (var cast in movie.Casts)
+                Console.WriteLine("\t{0}, {1}", cast.Person.Id, cast.Person.Name);
+        }
+
+        private static readonly (string id, string url, string title)[] Top50 =
 		{
 			("tt0111161", "https://www.imdb.com/title/tt0111161/", "The Shawshank Redemption"),
 			("tt0068646", "https://www.imdb.com/title/tt0068646/", "The Godfather"),
-			("tt0071562", "https://www.imdb.com/title/tt0071562/", "The Godfather: Part II"),
+			("tt0071562", "https://www.imdb.com/title/tt0071562/", "The Godfather Part II"),
 			("tt0468569", "https://www.imdb.com/title/tt0468569/", "The Dark Knight"),
 			("tt0050083", "https://www.imdb.com/title/tt0050083/", "12 Angry Men"),
 			("tt0108052", "https://www.imdb.com/title/tt0108052/", "Schindler's List"),
@@ -43,7 +57,7 @@ namespace ImdbNet.Tests
 			("tt0137523", "https://www.imdb.com/title/tt0137523/", "Fight Club"),
 			("tt0120737", "https://www.imdb.com/title/tt0120737/", "The Lord of the Rings: The Fellowship of the Ring"),
 			("tt0109830", "https://www.imdb.com/title/tt0109830/", "Forrest Gump"),
-			("tt0080684", "https://www.imdb.com/title/tt0080684/", "Star Wars: Episode V - The Empire Strikes Back"),
+			("tt0080684", "https://www.imdb.com/title/tt0080684/", "The Empire Strikes Back"),
 			("tt1375666", "https://www.imdb.com/title/tt1375666/", "Inception"),
 			("tt0167261", "https://www.imdb.com/title/tt0167261/", "The Lord of the Rings: The Two Towers"),
 			("tt0073486", "https://www.imdb.com/title/tt0073486/", "One Flew Over the Cuckoo's Nest"),
@@ -60,7 +74,7 @@ namespace ImdbNet.Tests
 			("tt0114814", "https://www.imdb.com/title/tt0114814/", "The Usual Suspects"),
 			("tt0245429", "https://www.imdb.com/title/tt0245429/", "Sen to Chihiro no kamikakushi"),
 			("tt0120815", "https://www.imdb.com/title/tt0120815/", "Saving Private Ryan"),
-			("tt0110413", "https://www.imdb.com/title/tt0110413/", "Léon"),
+			("tt0110413", "https://www.imdb.com/title/tt0110413/", "Léon: The Professional"),
 			("tt0120689", "https://www.imdb.com/title/tt0120689/", "The Green Mile"),
 			("tt0816692", "https://www.imdb.com/title/tt0816692/", "Interstellar"),
 			("tt0054215", "https://www.imdb.com/title/tt0054215/", "Psycho"),
